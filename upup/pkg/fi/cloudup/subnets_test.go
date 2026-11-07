@@ -221,3 +221,5 @@ func Test_AssignSubnetZones(t *testing.T) {
 		}
 	})
 }
+
+// TODO: add test for IPv6

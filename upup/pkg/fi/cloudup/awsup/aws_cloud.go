@@ -2062,6 +2062,15 @@ func findVPCInfo(c AWSCloud, vpcID string) (*fi.VPCInfo, error) {
 					CIDR: aws.ToString(subnet.CidrBlock),
 					Zone: aws.ToString(subnet.AvailabilityZone),
 				}
+				for _, s := range subnet.Ipv6CidrBlockAssociationSet {
+					if s.Ipv6CidrBlockState != nil && s.Ipv6CidrBlockState.State == ec2types.SubnetCidrBlockStateCodeAssociated {
+						subnetInfo.IPv6CIDR = *s.Ipv6CidrBlock
+					}
+				}
+				//if len(subnet.Ipv6CidrBlockAssociationSet) > 0 {
+				//	// NOTE: Since a subnet can be associated with at most one IPv6 CIDR, the length of `IPv6CIDRBlockAssociationSet` is always 0 or 1.
+				//	subnetInfo.IPv6CIDR = *subnet.Ipv6CidrBlockAssociationSet[0].Ipv6CidrBlock
+				//}
 
 				vpcInfo.Subnets = append(vpcInfo.Subnets, subnetInfo)
 			}
